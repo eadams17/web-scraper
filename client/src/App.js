@@ -3,13 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 
 class App extends React.Component {
-  state = { response: "", post: "", responseToPost: "" };
-
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
-      .catch(err => console.log(err));
-  }
+  state = { URL: "", keyword: "", response: "" };
 
   callApi = async () => {
     const response = await fetch("/api/hello");
@@ -20,51 +14,44 @@ class App extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const response = await fetch("/api/world", {
+    const { URL, keyword } = this.state;
+    const response = await fetch("/search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ post: this.state.post })
+      body: JSON.stringify({
+        URL: URL,
+        keyword: keyword
+      })
     });
     const body = await response.text();
-    this.setState({ responseToPost: body });
+    this.setState({ response: body });
   };
 
   render() {
     return (
-      <div className="App">
-        {" "}
-        <header className="App-header">
-          {" "}
-          <img src={logo} className="App-logo" alt="logo" />{" "}
-          <p>
-            {" "}
-            Edit <code>src/App.js</code> and save to reload.{" "}
-          </p>{" "}
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {" "}
-            Learn React{" "}
-          </a>{" "}
-        </header>{" "}
-        <p>{this.state.response}</p>{" "}
-        <form onSubmit={this.handleSubmit}>
-          {" "}
-          <p>
-            {" "}
-            <strong>Post to Server:</strong>{" "}
-          </p>{" "}
-          <input
-            type="text"
-            value={this.state.post}
-            onChange={e => this.setState({ post: e.target.value })}
-          />{" "}
-          <button type="submit">Submit</button>{" "}
-        </form>{" "}
-        <p>{this.state.responseToPost}</p>{" "}
+      <div>
+        <form onSubmit={this.handleSubmit} className="form">
+          <div className="input-container">
+            <div>URL</div>
+            <input
+              type="text"
+              value={this.state.post}
+              onChange={e => this.setState({ URL: e.target.value })}
+            />
+          </div>
+          <div className="input-container">
+            <div>Keyword</div>
+            <input
+              type="text"
+              value={this.state.post}
+              onChange={e => this.setState({ keyword: e.target.value })}
+            />
+          </div>
+          <button type="submit" className="button">
+            Submit
+          </button>
+        </form>
+        <div>{this.state.response}</div>
       </div>
     );
   }
