@@ -1,33 +1,49 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 class App extends React.Component {
-  state = { URL: "", keyword: "", response: "" };
+  state = { URL: "", keyword: "", scrapeResponse: "" };
 
-  callApi = async () => {
-    const response = await fetch("/api/hello");
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-    return body;
-  };
-
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault();
     const { URL, keyword } = this.state;
-    const response = await fetch("/search", {
+    fetch("/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         URL: URL,
         keyword: keyword
       })
-    });
-    const body = await response.text();
-    this.setState({ response: body });
+    })
+      .then(res => res.json())
+      .then(response => this.setState({ scrapeResponse: response }));
   };
 
+  renderTable(scrapeResponse) {
+    return (
+      <div>
+        <div>
+          <div>Timestamp</div>
+          <div>{scrapeResponse.timeRecord}</div>
+        </div>
+        <div>
+          <div>URL</div>
+          <div>{scrapeResponse.URL}</div>
+        </div>
+        <div>
+          <div>Keyword</div>
+          <div>{scrapeResponse.keyword}</div>
+        </div>
+        <div>
+          <div># of Instances</div>
+          <div>{scrapeResponse.wordCount}</div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
+    const { scrapeResponse } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit} className="form">
@@ -51,7 +67,7 @@ class App extends React.Component {
             Submit
           </button>
         </form>
-        <div>{this.state.response}</div>
+        {scrapeResponse && this.renderTable(scrapeResponse)}
       </div>
     );
   }
