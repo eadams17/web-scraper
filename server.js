@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-var request = require("request");
-var cheerio = require("cheerio");
+const request = require("request");
+const cheerio = require("cheerio");
 const app = express();
 const port = process.env.PORT || 5000;
 

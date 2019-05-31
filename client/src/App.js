@@ -2,16 +2,27 @@ import React, { PureComponent } from "react";
 import "./App.css";
 
 class App extends PureComponent {
-  state = { URL: "", keyword: "", scrapeResponse: "" };
+  state = { URL: "", keyword: "", scrapeResponse: "", loading: false };
+
+  formatUrl = url => {
+    if (!/^https?:\/\//i.test(url)) {
+      return "http://" + url;
+    } else {
+      return url;
+    }
+  };
 
   handleSubmit = async e => {
     e.preventDefault();
+    this.setState({ loading: true });
     const { URL, keyword } = this.state;
+    //prepend http if missing in search query
+    const formattedUrl = this.formatUrl(URL);
     const response = await fetch("/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        URL: URL,
+        URL: formattedUrl,
         keyword: keyword
       })
     });
@@ -19,11 +30,11 @@ class App extends PureComponent {
     if (response.status !== 200) {
       throw Error(body.message);
     }
-    this.setState({ scrapeResponse: body });
+    this.setState({ scrapeResponse: body, loading: false });
   };
 
   render() {
-    const { scrapeResponse } = this.state;
+    const { scrapeResponse, loading } = this.state;
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="form">
@@ -44,6 +55,13 @@ class App extends PureComponent {
           <button type="submit" className="button">
             Submit
           </button>
+          <div
+            style={
+              loading ? { visibility: "visible" } : { visibility: "hidden" }
+            }
+          >
+            Loading...
+          </div>
         </form>
         <table>
           <tbody>

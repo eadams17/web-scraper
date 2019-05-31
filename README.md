@@ -1,68 +1,35 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# YipitData Challenge
 
-## Available Scripts
+A small app that takes a URL and keyword and then scrapes that webpage to get the number of times the keyword appears.
 
-In the project directory, you can run:
+## Setup
 
-### `npm start`
+1. From the root directory, enter `cd client` and then run `yarn install`
+2. `cd ..` back into root directory.
+3. Run `yarn install`
+4. Run `yarn dev`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The app should now be accessible from `http://localhost:3000/`
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## Overview
 
-### `npm test`
+This application is built using **React** on the frontend and **Node/Express** on the backend. It allows a user to enter any webpage URL with a keyword term; the application then scrapes that webpage and returns the following information to the user:
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- the time at which the scrape was performed
+- the URL that was used
+- the keyword that was used
+- the number of instances of that keyword on the page
 
-### `npm run build`
+Upon submitting the form data, a `fetch` request with `POST` method to the `/scrape` API is made to the Express server. The API then makes a `GET` request to the specified URL. The document body of the webpage is then received and parsed for instances of the keyword. A separate function handles finding the number of matches found in the body. A JSON object is then constructed and sent back to the frontend with `timeRecord`, `wordCount`, `URL` and `keyword` data.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Technology
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+As per the challenge requirements, **React** is used for the frontend. I chose to use a `PureComponent` for performance optimization. The component has two main features: a form for the URL and keyword, and a table that is populated with the API response.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+As for the backend, I chose to use **Node/Express**. Since this application serves a pretty basic function, I wanted to use a framework that was lightweight. Additionally, it's quick and easilty customizable. I also chose to use the **Cheerio** library due to its utility functions which allows for easy manipulation of DOM elements.
 
-### `npm run eject`
+## Optimizations & Considerations
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Some websites may have anti-scraping efforts in place so these will not return the desired result while the functionality of this application is at a basic level. There could also be some performance optimizations made for webpages with larger amounts of information.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Given more time, I would add better search functionality such as case-sensitive keyword matching. Additionally, I would store search parameters and results in a database for quick retrieval should the user peform the same search, or the user would like a history of their search results. I thoroughly enjoy robust design so I would definitely add rich styling and integrate interesting animations.
