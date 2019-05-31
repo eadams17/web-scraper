@@ -19,36 +19,13 @@ class App extends React.Component {
       .then(response => this.setState({ scrapeResponse: response }));
   };
 
-  renderTable(scrapeResponse) {
-    return (
-      <div>
-        <div>
-          <div>Timestamp</div>
-          <div>{scrapeResponse.timeRecord}</div>
-        </div>
-        <div>
-          <div>URL</div>
-          <div>{scrapeResponse.URL}</div>
-        </div>
-        <div>
-          <div>Keyword</div>
-          <div>{scrapeResponse.keyword}</div>
-        </div>
-        <div>
-          <div># of Instances</div>
-          <div>{scrapeResponse.wordCount}</div>
-        </div>
-      </div>
-    );
-  }
-
   render() {
     const { scrapeResponse } = this.state;
     return (
-      <div>
+      <div className="container">
         <form onSubmit={this.handleSubmit} className="form">
           <div className="input-container">
-            <div>URL</div>
+            <div className="label">URL</div>
             <input
               type="text"
               value={this.state.post}
@@ -56,7 +33,7 @@ class App extends React.Component {
             />
           </div>
           <div className="input-container">
-            <div>Keyword</div>
+            <div className="label">Keyword</div>
             <input
               type="text"
               value={this.state.post}
@@ -67,7 +44,26 @@ class App extends React.Component {
             Submit
           </button>
         </form>
-        {scrapeResponse && this.renderTable(scrapeResponse)}
+        <table>
+          <tbody>
+            <tr>
+              <th>Timestamp</th>
+              <th>{scrapeResponse && scrapeResponse.timeRecord}</th>
+            </tr>
+            <tr>
+              <th>URL</th>
+              <th id="url">{scrapeResponse && scrapeResponse.URL}</th>
+            </tr>
+            <tr>
+              <th>Keyword</th>
+              <th>{scrapeResponse && scrapeResponse.keyword}</th>
+            </tr>
+            <tr>
+              <th># of Instances</th>
+              <th>{scrapeResponse && scrapeResponse.wordCount}</th>
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }
