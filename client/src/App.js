@@ -1,22 +1,25 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import "./App.css";
 
-class App extends React.Component {
+class App extends PureComponent {
   state = { URL: "", keyword: "", scrapeResponse: "" };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
     const { URL, keyword } = this.state;
-    fetch("/scrape", {
+    const response = await fetch("/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         URL: URL,
         keyword: keyword
       })
-    })
-      .then(res => res.json())
-      .then(response => this.setState({ scrapeResponse: response }));
+    });
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    this.setState({ scrapeResponse: body });
   };
 
   render() {
@@ -28,7 +31,6 @@ class App extends React.Component {
             <div className="label">URL</div>
             <input
               type="text"
-              value={this.state.post}
               onChange={e => this.setState({ URL: e.target.value })}
             />
           </div>
@@ -36,7 +38,6 @@ class App extends React.Component {
             <div className="label">Keyword</div>
             <input
               type="text"
-              value={this.state.post}
               onChange={e => this.setState({ keyword: e.target.value })}
             />
           </div>
@@ -52,7 +53,15 @@ class App extends React.Component {
             </tr>
             <tr>
               <th>URL</th>
-              <th id="url">{scrapeResponse && scrapeResponse.URL}</th>
+              <th id="url">
+                <a
+                  href={scrapeResponse.URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {scrapeResponse && scrapeResponse.URL}
+                </a>
+              </th>
             </tr>
             <tr>
               <th>Keyword</th>
