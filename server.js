@@ -23,7 +23,9 @@ app.post("/scrape", (req, res) => {
   // keyword matching will ignore case sensitivity for simplicity's sake
   const keyword = req.body.keyword.toLowerCase();
   request(URL, function(error, response, body) {
-    if (!error) {
+    if (error) {
+      console.log(error);
+    } else {
       // Parse the document body
       const $ = cheerio.load(body);
       const wordCount = searchForWord($, keyword);

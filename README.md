@@ -1,13 +1,9 @@
-# YipitData Challenge
-
 A small app that takes a URL and keyword and then scrapes that webpage to get the number of times the keyword appears.
 
 ## Setup
 
-1. From the root directory, enter `cd client` and then run `yarn install`
-2. `cd ..` back into root directory.
-3. Run `yarn install`
-4. Run `yarn dev`
+1. From the root directory, run `yarn run setup`
+2. Run `yarn start`
 
 The app should now be accessible from `http://localhost:3000/`
 
@@ -24,7 +20,7 @@ Upon submitting the form data, a `fetch` request with `POST` method to the `/scr
 
 ## Technology
 
-As per the challenge requirements, **React** is used for the frontend. I chose to use a `PureComponent` for performance optimization. The component has two main features: a form for the URL and keyword, and a table that is populated with the API response.
+**React** is used for the frontend. I chose to use a `PureComponent` for performance optimization. The component has two main features: a form for the URL and keyword, and a table that is populated with the API response.
 
 As for the backend, I chose to use **Node/Express**. Since this application serves a pretty basic function, I wanted to use a framework that was lightweight. Additionally, it's quick and easilty customizable. I also chose to use the **Cheerio** library due to its utility functions which allows for easy manipulation of DOM elements.
 
